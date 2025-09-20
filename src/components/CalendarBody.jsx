@@ -1,11 +1,4 @@
-import React from "react";
-
 function CalendarBody({ days = [] }) {
-    console.log({ days });
-
-
-
-
     return (
         <div className="calendar-container">
             {days?.map((day) => {

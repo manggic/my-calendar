@@ -70,13 +70,11 @@ function App() {
 
     // call for todays date
     useEffect(() => {
-        console.log("inside useEffect");
         let dateObj = new Date();
         let month = dateObj.getMonth(); // month number including index
         let year = dateObj.getFullYear(); // current year
         let daysInMonth = calDaysInMonth(month, year); // days in current month
 
-        console.log({ daysInMonth }, { month });
 
         setIndexOfFirstDay(calcIndexOfFirstDay({ year, month }));
 
@@ -88,7 +86,6 @@ function App() {
         setYearToShow(year);
     }, []);
 
-    console.log("re-render indexOfFirstDay", indexOfFirstDay);
 
     // useEffect(() => {}, [monthToShow, yearToShow]);
     // return;
