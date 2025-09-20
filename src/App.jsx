@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import "./App.css";
 import Header from "./components/Header";
 import Weekday from "./components/Weekday";
 import CalendarBody from "./components/CalendarBody";
 import { months, weekdays } from "./constants";
+import ModalDialog from "./components/ModalDialog";
 
 function App() {
     const [monthToShow, setMonthToShow] = useState(null);
@@ -17,6 +18,12 @@ function App() {
     const [currentYear, setCurrentYear] = useState(null);
 
     const [indexOfFirstDay, setIndexOfFirstDay] = useState(null);
+
+    const [selectedDay, setSelectedDay] = useState(null);
+
+    const [events, setEvents] = useState({});
+
+    const dialogRef = useRef();
 
     // pass month number without index
     // calc days in month
@@ -68,13 +75,20 @@ function App() {
         // setindexOfFirstDay(weekdays.indexOf(weekDayInString));
     }
 
+    useEffect(() => {
+        let events = localStorage.getItem("events") || {};
+        if (events) {
+            events = JSON.parse(localStorage.getItem("events"));
+            setEvents(events || {});
+        }
+    }, []);
+
     // call for todays date
     useEffect(() => {
         let dateObj = new Date();
         let month = dateObj.getMonth(); // month number including index
         let year = dateObj.getFullYear(); // current year
         let daysInMonth = calDaysInMonth(month, year); // days in current month
-
 
         setIndexOfFirstDay(calcIndexOfFirstDay({ year, month }));
 
@@ -86,13 +100,42 @@ function App() {
         setYearToShow(year);
     }, []);
 
+    const handleModalOpen = ({ day }) => {
+        dialogRef.current.showModal();
+        setSelectedDay(day);
+    };
 
-    // useEffect(() => {}, [monthToShow, yearToShow]);
-    // return;
+    const handleModalClose = () => {
+        if (dialogRef.current) {
+            dialogRef.current.close();
+        }
+    };
+
+    const handleModalSubmit = () => {
+        let key = `${selectedDay}-${monthToShow}-${yearToShow}`;
+        let inputName = document.getElementById("event-name")?.value;
+
+        localStorage.setItem(
+            "events",
+            JSON.stringify({
+                ...events,
+                [key]: [...(events[key] || []), { eventName: inputName }],
+            })
+        );
+        setEvents((prev) => ({
+            ...prev,
+            [key]: [...(events[key] || []), { eventName: inputName }],
+        }));
+
+        if (document.getElementById("event-name")) {
+            document.getElementById("event-name").value = "";
+        }
+        handleModalClose();
+    };
+
     return (
         <>
-            <div className="container">
-
+            <div className="app-container">
                 <div>
                     <Header
                         year={yearToShow}
@@ -104,26 +147,40 @@ function App() {
                     <CalendarBody
                         days={[
                             ...(indexOfFirstDay
-                                ? Array.from({ length: indexOfFirstDay }, () => ({
-                                    data: null,
-                                }))
+                                ? Array.from(
+                                      { length: indexOfFirstDay },
+                                      () => ({
+                                          data: null,
+                                      })
+                                  )
                                 : []),
-                            ...Array.from({ length: daysInMonth }, (_, index) => ({
-                                data: index + 1,
-                                highlight:
-                                    currentDay === index + 1 &&
-                                    currentMonth === monthToShow &&
-                                    currentYear === yearToShow,
-                            })),
+                            ...Array.from(
+                                { length: daysInMonth },
+                                (_, index) => ({
+                                    data: index + 1,
+                                    highlight:
+                                        currentDay === index + 1 &&
+                                        currentMonth === monthToShow &&
+                                        currentYear === yearToShow,
+                                    event: events?.[
+                                        `${
+                                            index + 1
+                                        }-${monthToShow}-${yearToShow}`
+                                    ],
+                                })
+                            ),
                         ]}
+                        handleModalOpen={handleModalOpen}
                     />
                 </div>
-
-
+                <ModalDialog
+                    dialogRef={dialogRef}
+                    handleModalClose={handleModalClose}
+                    handleModalSubmit={handleModalSubmit}
+                />
             </div>
         </>
     );
 }
 
 export default App;
-

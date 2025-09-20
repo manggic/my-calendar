@@ -5,7 +5,7 @@
     box-sizing: border-box;
 }
 
-.container {
+.app-container {
     display: flex;
     /* flex-direction: column; */
     justify-content: center;
@@ -69,4 +69,18 @@
 
 .next-arrow {
     cursor: pointer;
+}
+
+dialog::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.event-box {
+    top: 7px;
+    background: #524b4b;
+    width: 150px;
+    z-index: 10;
+    /* top: 35px; */
+    left: 106px;
+    /* border: 1px solid green; */
 }
