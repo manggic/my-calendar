@@ -26,7 +26,7 @@ function App() {
     const handleBackArrow = () => {
         // let month = weekdays[setMonthToShow];
 
-        if (monthToShow === 1) {
+        if (monthToShow === 0) {
             setMonthToShow(11);
             setYearToShow(yearToShow - 1);
             setCalendarBody({ month: 11, year: yearToShow - 1 });
@@ -92,30 +92,34 @@ function App() {
     return (
         <>
             <div className="container">
-                <Header
-                    year={yearToShow}
-                    handleNextArrow={handleNextArrow}
-                    handleBackArrow={handleBackArrow}
-                    monthInString={months[monthToShow]}
-                />
-                <Weekday />
-                {/* {indexOfFirstDay && daysInMonth } */}
-                <CalendarBody
-                    days={[
-                        ...(indexOfFirstDay
-                            ? Array.from({ length: indexOfFirstDay }, () => ({
-                                data: null,
-                            }))
-                            : []),
-                        ...Array.from({ length: daysInMonth }, (_, index) => ({
-                            data: index + 1,
-                            highlight:
-                                currentDay === index + 1 &&
-                                currentMonth === monthToShow &&
-                                currentYear === yearToShow,
-                        })),
-                    ]}
-                />
+
+                <div>
+                    <Header
+                        year={yearToShow}
+                        handleNextArrow={handleNextArrow}
+                        handleBackArrow={handleBackArrow}
+                        monthInString={months[monthToShow]}
+                    />
+                    <Weekday />
+                    <CalendarBody
+                        days={[
+                            ...(indexOfFirstDay
+                                ? Array.from({ length: indexOfFirstDay }, () => ({
+                                    data: null,
+                                }))
+                                : []),
+                            ...Array.from({ length: daysInMonth }, (_, index) => ({
+                                data: index + 1,
+                                highlight:
+                                    currentDay === index + 1 &&
+                                    currentMonth === monthToShow &&
+                                    currentYear === yearToShow,
+                            })),
+                        ]}
+                    />
+                </div>
+
+
             </div>
         </>
     );

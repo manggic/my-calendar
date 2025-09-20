@@ -6,8 +6,10 @@
 }
 
 .container {
-    text-align: center;
-    margin: 0 auto;
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: center;
+    align-items: center;
 }
 
 .header {
@@ -22,12 +24,13 @@
 
 .header-date {
     padding: 0 20px;
+    width: 10%;
 }
 
 .weekday-container {
     display: flex;
     /* gap:10px; */
-    /* justify-content: center; */
+    justify-content: center;
 }
 
 .weekday {
@@ -35,12 +38,15 @@
     /* padding: 5px 0px; */
     width: 183px;
     height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .calendar-container {
     display: flex;
     flex-wrap: wrap;
-
+    justify-content: center;
 }
 
 .calender-box {
@@ -49,20 +55,18 @@
     align-items: center;
     border: 1px solid white;
     /* padding: 5px 0px; */
-   height: 50px;
+    height: 50px;
     width: 183px;
-    
 }
 
-
-.blink{
-  background-color: rgb(103, 40, 145);
+.blink {
+    background-color: rgb(103, 40, 145);
 }
 
-.back-arrow{
-  cursor: pointer;
+.back-arrow {
+    cursor: pointer;
 }
 
-.next-arrow{
-  cursor: pointer;
+.next-arrow {
+    cursor: pointer;
 }
